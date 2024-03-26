@@ -8,7 +8,10 @@
 
 #include <Arduino.h>
 #include <avr/io.h>
-
+#include "timer.h"
+#include "pwm.h"
+#include "acd.h"
+#include "switch.h"
 
 
 //Initialize states.
