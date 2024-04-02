@@ -5,7 +5,7 @@ FOR MORE INFO ON THE 7 Segment Display (5611AS), refer to:   https://components1
 */
 #include <avr/io.h>
 #include <util/delay.h>
-#include "led.h"
+#include "ssdisplay.h"
 
 
 void initSSDisplay() {
