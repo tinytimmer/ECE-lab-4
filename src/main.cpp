@@ -26,8 +26,9 @@ volatile stateType state = wait_press;
 /* volatile unsigned int motorState = 0;
 volatile unsigned int adc_val = 0; */
 //Initialize counter for keeping track of SSD counter. 
-int cur_count = 9; 
-volatile boolean counting = true;
+//int cur_count = 9; 
+volatile boolean activate = true;
+unsigned int result;
 
 int main(){
   //below I had copied from previous labs by accident but I think it can be usedful for debugging purposes
@@ -68,9 +69,9 @@ int main(){
       switch(state){
         case wait_press:
         // TODO: Handle ADC conversion to control motor via PWM duty cycle
-            counting = ADCL;
-            counting += ((unsigned int) ADCH) << 8;
-            changeDutyCycle(counting);
+            result = ADCL;
+            result += ((unsigned int) ADCH) << 8;
+            changeDutyCycle(activate);
             clearSSDisplay();
             break;
           case button_press:
@@ -87,8 +88,8 @@ int main(){
         // For each state 9 through 0, desplay the correct number and then wait a second before transitioning to the next state
           case nine:
             // Turn motor off 
-            counting = (1023 * 0.5);
-            changeDutyCycle(counting);
+            result = (1023 * 0.5);
+            changeDutyCycle(result);
             turnOnSSDWithChar(9);
             delayMs(1);
             state = eight;
@@ -146,7 +147,7 @@ int main(){
             turnOnSSDWithChar(0);
             delayMs(1);
             state = wait_press;
-            counting = true;
+            activate = true;
             break;
     }
   }
@@ -156,7 +157,7 @@ int main(){
 //from previous labs
 ISR(INT0_vect){
   // Wanted to add a flag to tell us if the countdown is currently in progress or not
-  if (!counting) {
+  if (!activate) {
     return;
   }
 
@@ -166,6 +167,6 @@ ISR(INT0_vect){
   }
   else if(state == wait_release){
     state = button_release;
-    counting = false;
+    activate = false;
   }
 }
