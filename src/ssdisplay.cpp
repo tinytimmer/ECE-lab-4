@@ -9,16 +9,15 @@ FOR MORE INFO ON THE 7 Segment Display (5611AS), refer to:   https://components1
 
 
 void initSSDisplay() {
-    /* The pins are initialized as outputs in order, 37, 36, 35, 34, 33, 32, 31 -> A, B, C, D, E, F, G
-    *  These are ports, in order, PC0, PC1, PC2, PC3, PC4, PC5, PC6 as outputs. 
+    /* The pins are initialized as outputs in order: 37,  36,  35,  34,  33,  32,  31 -> A, B, C, D, E, F, G
+    *                    These are ports, in order: PC0, PC1, PC2, PC3, PC4, PC5, PC6 as outputs. 
     */
-   DDRC |= (1 << DDC0) | (1 << DDC1) |  (1 << DDC2) | (1 << DDC3) 
-   | (1 << DDC4) | (1 << DDC5) | (1 << DDC6); 
+   DDRC |= (1 << DDC0) | (1 << DDC1) |  (1 << DDC2) | (1 << DDC3) | (1 << DDC4) | (1 << DDC5) | (1 << DDC6); 
 }
 
 //Recieves the character to display, running through a switch case to determine what that actually is
 //The lights are displayed according to their specification a-g, with the PORTC pins going down alphabeticaly. 
-//  Cases for 10-1. (10 = empty display), (default cause = zero). 
+//  Cases for 9-1. (default cause = zero). 
 void turnOnSSDWithChar(unsigned char num){
   switch (num) {
     case 9:
@@ -56,12 +55,15 @@ void turnOnSSDWithChar(unsigned char num){
         PORTC |= (1 << PORTC1) | (1 << PORTC2); 
         PORTC &= ~((1 << PORTC0) | (1 << PORTC3) | (1 << PORTC4) | (1 << PORTC5) | (1 << PORTC6)); 
         break;
-    case 10: //Empty display
-        PORTC &= ~((1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3) | (1 << PORTC4) | (1 << PORTC5) | (1 << PORTC6)); 
-        break;
     default: //Zero. 
         PORTC |= (1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3) | (1 << PORTC4) | (1 << PORTC5); 
         PORTC &= ~(1 << PORTC6); 
         break;
   }
+}
+
+//decided to make this a seperate function to help clear the display directly
+void clearSSDisplay(){
+    //Empty display, clears/turn off all LEDs in SSDisplay
+    PORTC &= ~((1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3) | (1 << PORTC4) | (1 << PORTC5) | (1 << PORTC6)); 
 }

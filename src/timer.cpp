@@ -11,6 +11,8 @@ void initTimer0() {
     //TODO!!! Double check the assigned values here. 
     /*
      * OCR0A = (0.000001*16MHz)/(1) = 16
+     *
+     * checked by Enoch refer to Discord chat
     */
    // CTC SETTING IN THE TIMER REGISTER
 	TCCR0A &= ~( (1 << WGM10) | ( 1<< WGM11));
@@ -38,13 +40,13 @@ void delayUs(unsigned int delay){
     }
 }
 
-
-
 //Used for the SSdisplay Ten second count down. 1 millisecond delay. 
 void initTimer1() {
     //TODO!!! Double check the assigned values here. 
     /*
      * OCR1A = (0.001*16MHz)/(64) = 250
+     *
+     * checked by Enoch refer to Discord chat
     */
 
    // CTC SETTING IN THE TIMER REGISTER

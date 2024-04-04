@@ -1,83 +1,49 @@
 #include "pwm.h"
 #include <Arduino.h>
-#include "timer.h"
+#include "motor.h"
 
+//use Timer3 for PWM
 // Clock is 16 MHz
-void initPWM(){
-  // Configure Timer 1 to fast PWM, 10 bit
-    TCCR1A |= (1 << WGM10 | 1 << WGM11);
-    TCCR1B |= (1 << WGM12);
-    TCCR1B &= ~(1 << WGM13);
+void initPWMTimer3(){
+    //Pin 5 - Output Compare Match Flag
+    DDRE |= (1<< DDE3); // assigns pin 5 to output
 
-  // Configure Timer 3 to fast PWM, 10 bit
-    TCCR3A |= (1 << WGM10 | 1 << WGM11);
-    TCCR3B |= (1 << WGM12);
-    TCCR3B &= ~(1 << WGM13);
 
-  // set prescalar to 1
-    TCCR1B |= (1 << CS10);
-    TCCR1B &= ~(1 << CS11 | 1 << CS12);
-    TCCR3B |= (1 << CS10);
-    TCCR3B &= ~(1 << CS11 | 1 << CS12);
+    // set Fast PWM 10-bit mode, non-inverting
+    TCCR3A |= (1 << COM3A1) | (1 << WGM31) | (1 << WGM30);
+    TCCR3B |= (1 << WGM32) | (1 <<CS30);
 
-  // set clear on compare match mode   //noninverting mode
-    TCCR1A |= (1 << COM1A1 | 1 << COM1B1);
-    TCCR1A &= ~(1 << COM1A0 | 1 << COM1B0);
-    TCCR3A |= (1 << COM1A1 | 1 << COM1B1);
-    TCCR3A &= ~(1 << COM1A0 | 1 << COM1B0);
+    //set duty cycle by determining OCR3A
+    //duty cycle = 25% = 0.25
+    //duty cycle = Tpulse/Tperiod = OCR3A/0x3FF
+    //OCR3A = 0.25 * 1023 = 255
 
-  //set duty cycles
-    OCR1AH = 0x00;
-    OCR1AL = 0x00;
-    OCR1BH = 0x00;
-    OCR1BL = 0x00;
-    OCR3AH = 0x00;
-    OCR3AL = 0x00;
-    OCR3BH = 0x00;
-    OCR3BL = 0x00;
-    
-  // set the pin as output
-    //motor 1
-    DDRB |= (1 << DDB5); //pin 11 on board
-    DDRB |= (1 << DDB6); //pin 12 on board
-
-    //motor 2, if we want to do two motors
-    DDRE |= (1 << DDE3); // pin 5 on board
-    DDRE |= (1 << DDE4); // pin 2 on board
+    OCR3A = 255;
 }
 
-void setMotor1Forward(){
-  OCR1AH = 0x00; //Motor 1 Forward
-  OCR1AL = 0x00;
-  OCR1BH = 0x03;
-  OCR1BL = 0x00;
-
-  OCR3AH = 0x03; //Motor 2 Reverse
-  OCR3AL = 0x00;
-  OCR3BH = 0x00;
-  OCR3BL = 0x00;
-}
-void setMotor1Reverse(){
-  OCR1AH = 0x03; //Motor 1 Reverse
-  OCR1AL = 0x00;
-  OCR1BH = 0x00;
-  OCR1BL = 0x00;
-
-  OCR3AH = 0x00; //Motor 2 Forward
-  OCR3AL = 0x00;
-  OCR3BH = 0x03;
-  OCR3BL = 0x00;
-}
-
-void setMotor1Off(){
-  OCR1AH = 0x00;
-  OCR1AL = 0x00;
-  OCR1BH = 0x00;
-  OCR1BL = 0x00;
-}
-void setMotor2Off(){
-  OCR3AH = 0x00;
-  OCR3AL = 0x00;
-  OCR3BH = 0x00;
-  OCR3BL = 0x00;
+void changeDutyCycle(unsigned int result){
+    // read in ADCL and ADCH as 10bit result
+    // if 2.5 volts, then no PWM to motor
+    if (result == (1023 * 0.5)) {
+        OCR3A = 0;
+        OCR4A = 0;
+    }
+    // if less than 2.5 volts, clockwise (Timer 3)    
+    else if (result < (1023 * 0.5)) {
+        setDirection(1);
+        OCR3A = (1023* 0.5 - result) * 2;
+        OCR4A = 0;
+    }
+    // if 5 volts, max RPM counterclockwise
+    else if (result == 1023) {
+        setDirection(0);
+        OCR3A = 0;
+        OCR4A = 1023;
+    }
+    // if 0 volts, max RPM clockwise
+    else if (result == 0) {
+        setDirection(1);
+        OCR3A = 1023;
+        OCR4A = 0;
+    }
 }

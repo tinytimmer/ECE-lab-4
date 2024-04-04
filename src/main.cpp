@@ -15,9 +15,9 @@
 #include "ssdisplay.h"
 
 
-//Initialize states. carried over from lab 2 and 3
+//Initialize states. carried over from lab 2 and 3, added in more cases for the number we want to display 
 typedef enum stateType_enum{
-  wait_press, button_press, wait_release, button_release
+  wait_press, button_press, wait_release, button_release, nine, eight, seven, six, five ,four, three, two, one, zero
 }  stateType;
 
 volatile stateType state = wait_press;
@@ -27,7 +27,7 @@ volatile stateType state = wait_press;
 volatile unsigned int adc_val = 0; */
 //Initialize counter for keeping track of SSD counter. 
 int cur_count = 9; 
-volatile boolean counting = false;
+volatile boolean counting = true;
 
 int main(){
   //below I had copied from previous labs by accident but I think it can be usedful for debugging purposes
@@ -39,11 +39,15 @@ int main(){
   initTimer1();   // Initialize the SSDisplay timer. 
   initSSDisplay();// Initialize the SSDisplay. 
   initSwitchPD0();// Initialize the switch used for the SSDisplay.
+  initPWMTimer3(); //intialize PWM signal using timer 3
+  initADC0();
+
 
     while(1){
       //suggestion from Cole
       //If the system is currently counting down
-      if(counting) {
+      //Tried with this suggestion and there were still some issues with the display so I went another route I hope thats ok yall
+      /* if(counting) {
         //send the number off to be displayed. 
         turnOnSSDWithChar(cur_count);
 
@@ -59,57 +63,109 @@ int main(){
           //increment counter. 
           cur_count -= 1;
         }
-      }
+      } */
 
       switch(state){
         case wait_press:
+        // TODO: Handle ADC conversion to control motor via PWM duty cycle
+            counting = ADCL;
+            counting += ((unsigned int) ADCH) << 8;
+            changeDutyCycle(counting);
+            clearSSDisplay();
             break;
           case button_press:
+              delayMs(1);
               state = wait_release;
             break;
           case wait_release:
             break;
           case button_release:
-          //Serial.println("button_release");
+            delayMs(1);
+            state = nine;
+            break;
 
-            /* if (motorState == 2){ //Reverse
-              Serial.println("reverse");
-              setMotor1Reverse();
-              motorState = 0;
-              state = wait_press;
-              break;
-            }
-            else if (motorState == 1){ //Forward
-              Serial.println("forward");
-              setMotor1Forward();
-              motorState = 2;
-              state = wait_press;
-              break;
-            }
-            else if (motorState == 0){ //Idle
-              Serial.println("idle");
-              setMotor1Off();
-              motorState = 1;
-              state = wait_press;
-              break;
-            } */
-      break;
+        // For each state 9 through 0, desplay the correct number and then wait a second before transitioning to the next state
+          case nine:
+            // Turn motor off 
+            counting = (1023 * 0.5);
+            changeDutyCycle(counting);
+            turnOnSSDWithChar(9);
+            delayMs(1);
+            state = eight;
+            break;
+
+          case eight:
+            turnOnSSDWithChar(8);
+            delayMs(1);
+            state = seven;
+            break;
+
+          case seven:
+            turnOnSSDWithChar(7);
+            delayMs(1);
+            state = six;
+            break;
+
+          case six:
+            turnOnSSDWithChar(6);
+            delayMs(1);
+            state = five;
+            break;
+
+          case five:
+            turnOnSSDWithChar(5);
+            delayMs(1);
+            state = four;
+            break;
+
+          case four:
+            turnOnSSDWithChar(4);
+            delayMs(1);
+            state = three;
+            break;
+
+          case three:
+            turnOnSSDWithChar(3);
+            delayMs(1);
+            state = two;
+            break;
+
+          case two:
+            turnOnSSDWithChar(2);
+            delayMs(1);
+            state = one;
+            break;
+
+          case one:
+            turnOnSSDWithChar(1);
+            delayMs(1);
+            state = zero;
+            break;
+
+          case zero:
+            turnOnSSDWithChar(0);
+            delayMs(1);
+            state = wait_press;
+            counting = true;
+            break;
     }
   }
     return 0;
 }
 
-//for lab4, I think there has a function similar to the ISR below for when we pushed the button to indicate when the motor(s) change direction, what do yall think?
-
-
-
 //from previous labs
 ISR(INT0_vect){
+  // Wanted to add a flag to tell us if the countdown is currently in progress or not
+  if (!counting) {
+    return;
+  }
+
 //Serial.println("switch has been HIT");
   if(state == wait_press){
     state = button_press;
   }
   else if(state == wait_release){
     state = button_release;
+    counting = false;
   }
 }

@@ -6,5 +6,6 @@
 
 void initSSDisplay();
 void turnOnSSDWithChar(unsigned char num);
+void clearSSDisplay();
 
 #endif
