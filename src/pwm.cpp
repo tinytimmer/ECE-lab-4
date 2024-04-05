@@ -34,6 +34,14 @@ void changeDutyCycle(unsigned int result){
         OCR3A = (1023* 0.5 - result) * 2;
         OCR4A = 0;
     }
+
+    // if more than 2.5 volts, counterclockwise
+    else if (result > (1023 * 0.5)) {
+        setDirection(0);
+        OCR3A = 0;
+        OCR4A = result;
+    }
+
     // if 5 volts, max RPM counterclockwise
     else if (result == 1023) {
         setDirection(0);
