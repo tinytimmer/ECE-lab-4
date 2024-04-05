@@ -13,6 +13,7 @@
 #include "acd.h"
 #include "switch.h"
 #include "ssdisplay.h"
+#include "motor.h"
 
 
 //Initialize states. carried over from lab 2 and 3, added in more cases for the number we want to display 
@@ -42,6 +43,7 @@ int main(){
   initSwitchPD0();// Initialize the switch used for the SSDisplay.
   initPWMTimer3(); //intialize PWM signal using timer 3
   initADC0();
+  motorSetup();
 
 
     while(1){
@@ -71,17 +73,17 @@ int main(){
         // TODO: Handle ADC conversion to control motor via PWM duty cycle
             result = ADCL;
             result += ((unsigned int) ADCH) << 8;
-            changeDutyCycle(activate);
+            changeDutyCycle(result);
             clearSSDisplay();
             break;
           case button_press:
-              delayMs(1);
+              delayMs(100);
               state = wait_release;
             break;
           case wait_release:
             break;
           case button_release:
-            delayMs(1);
+            delayMs(100);
             state = nine;
             break;
 
@@ -89,63 +91,63 @@ int main(){
           case nine:
             // Turn motor off 
             result = (1023 * 0.5);
-            changeDutyCycle(result);
+            changeDutyCycle(0);
             turnOnSSDWithChar(9);
-            delayMs(1);
+            delayMs(100000);
             state = eight;
             break;
 
           case eight:
             turnOnSSDWithChar(8);
-            delayMs(1);
+            delayMs(100000);
             state = seven;
             break;
 
           case seven:
             turnOnSSDWithChar(7);
-            delayMs(1);
+            delayMs(100000);
             state = six;
             break;
 
           case six:
             turnOnSSDWithChar(6);
-            delayMs(1);
+            delayMs(100000);
             state = five;
             break;
 
           case five:
             turnOnSSDWithChar(5);
-            delayMs(1);
+            delayMs(100000);
             state = four;
             break;
 
           case four:
             turnOnSSDWithChar(4);
-            delayMs(1);
+            delayMs(100000);
             state = three;
             break;
 
           case three:
             turnOnSSDWithChar(3);
-            delayMs(1);
+            delayMs(100000);
             state = two;
             break;
 
           case two:
             turnOnSSDWithChar(2);
-            delayMs(1);
+            delayMs(100000);
             state = one;
             break;
 
           case one:
             turnOnSSDWithChar(1);
-            delayMs(1);
+            delayMs(100000);
             state = zero;
             break;
 
           case zero:
             turnOnSSDWithChar(0);
-            delayMs(1);
+            delayMs(100000);
             state = wait_press;
             activate = true;
             break;
