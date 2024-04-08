@@ -6,7 +6,7 @@
 void motorSetup() {
   // Set all the motor control pins to outputs pin 11 & 10 on board
     DDRB |= (1 << DDB5) | (1 << DDB4);
-    //DDRH |= (1 << DDH6); use this is we wanted to have another motor
+    //DDRH |= (1 << DDH6); use this if we wanted to have another motor
 }
 
 void setDirection(int direction) {
