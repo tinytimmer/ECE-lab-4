@@ -9,15 +9,19 @@ void motorSetup() {
     //DDRH |= (1 << DDH6); use this if we wanted to have another motor
 }
 
-void setDirection(int direction) {
+void setDirection(unsigned int num) {
 
-  if (direction == 1) {
+  if (num < 512) { //clockwise
     PORTB |= (1 << DDB5);
     PORTB &= ~(1 << DDB4);
   }
 
-  else {
+  else if(num >512) {  // counter-clockwise
     PORTB |= (1 << DDB4);
+    PORTB &= ~(1 << DDB5);
+  }
+  else{ //motor off
+    PORTB &= ~(1 << DDB4);
     PORTB &= ~(1 << DDB5);
   }
 

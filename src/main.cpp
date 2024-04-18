@@ -29,7 +29,7 @@ volatile unsigned int adc_val = 0; */
 //Initialize counter for keeping track of SSD counter. 
 //int cur_count = 9; 
 volatile boolean activate = true;
-unsigned int result;
+
 
 int main(){
   //below I had copied from previous labs by accident but I think it can be usedful for debugging purposes
@@ -44,7 +44,7 @@ int main(){
   initPWMTimer3(); //intialize PWM signal using timer 3
   initADC0();
   motorSetup();
-
+  unsigned int result;
 
     while(1){
       //suggestion from Cole
@@ -76,14 +76,17 @@ int main(){
             changeDutyCycle(result);
             clearSSDisplay();
             break;
+
           case button_press:
-              delayMs(100);
+              delayMs(1);
               state = wait_release;
             break;
+
           case wait_release:
             break;
+
           case button_release:
-            delayMs(100);
+            delayMs(1);
             state = nine;
             break;
 
@@ -91,63 +94,63 @@ int main(){
           case nine:
             // Turn motor off 
             result = (1023 * 0.5);
-            changeDutyCycle(0);
+            changeDutyCycle(result);
             turnOnSSDWithChar(9);
-            delayMs(100000);
+            delayS(1);
             state = eight;
             break;
 
           case eight:
             turnOnSSDWithChar(8);
-            delayMs(100000);
+            delayS(1);
             state = seven;
             break;
 
           case seven:
             turnOnSSDWithChar(7);
-            delayMs(100000);
+            delayS(1);
             state = six;
             break;
 
           case six:
             turnOnSSDWithChar(6);
-            delayMs(100000);
+            delayS(1);
             state = five;
             break;
 
           case five:
             turnOnSSDWithChar(5);
-            delayMs(100000);
+            delayS(1);
             state = four;
             break;
 
           case four:
             turnOnSSDWithChar(4);
-            delayMs(100000);
+            delayS(1);
             state = three;
             break;
 
           case three:
             turnOnSSDWithChar(3);
-            delayMs(100000);
+            delayS(1);
             state = two;
             break;
 
           case two:
             turnOnSSDWithChar(2);
-            delayMs(100000);
+            delayS(1);
             state = one;
             break;
 
           case one:
             turnOnSSDWithChar(1);
-            delayMs(100000);
+            delayS(1);
             state = zero;
             break;
 
           case zero:
             turnOnSSDWithChar(0);
-            delayMs(100000);
+            delayS(1);
             state = wait_press;
             activate = true;
             break;

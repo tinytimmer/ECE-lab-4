@@ -31,7 +31,7 @@ void initADC0(){
     // sampling rate = 1 / ((1/125KHz) * 13 clock cylces) = 9615 Hz 
     ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
 
-    // disable ADC0 pin digital input - pin 0) on board
+    // disable ADC0 pin digital input (pin 0 on board)
     DIDR0 |= (1 << ADC0D);
 
     // start the first ADC conversion

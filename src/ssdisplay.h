@@ -5,7 +5,7 @@
 #define SSDISPLAY_H
 
 void initSSDisplay();
-void turnOnSSDWithChar(unsigned char num);
+void turnOnSSDWithChar(int num);
 void clearSSDisplay();
 
 #endif
