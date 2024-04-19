@@ -8,9 +8,16 @@ the seven segment display. */
 * You will need to use CTC mode */
 void initTimer0() {
     // WGM bits should be 010 for CTC mode
-    TCCR0A &= ~( 1 << WGM00);
-    TCCR0A |=  ( 1 << WGM01);
-    TCCR0B &= ~( 1 << WGM02); 
+    TCCR0A &= ~( (1 << WGM10) | ( 1<< WGM11));
+    TCCR0B |= ( 1 << WGM12);
+    TCCR0B &= ~ ( 1 << WGM13);
+
+    // sET THE BITS FOR THE prescaller to 001. 
+    TCCR0B|=(1 << CS00);
+    TCCR0B&=~(1 << CS01);
+    TCCR0B&=~(1 << CS02);
+    // CTC compare value
+    OCR0A=16; 
 
     /* //TODO!!! Double check the assigned values here. 
     /*
@@ -31,7 +38,7 @@ void initTimer0() {
     OCR0A=16; */
 }
 //Utilizes timer0 to implement delays for state change. 
-void delayMs(unsigned int delay){
+/* void delayMs(unsigned int delay){
 
     int count = delay;
 
@@ -61,8 +68,9 @@ void delayMs(unsigned int delay){
     }
     // turn clock off
     TCCR0B  &= ~ ((1 << CS00) | (1 << CS01) | ( 1 << CS02));    
-}
-/* void delayUs(unsigned int delay){
+} */
+void delayUs(unsigned int delay){
+
     unsigned int delayCnt = 0;
     TCNT0 = 0; //starting the timer at 0 instead of some random junk number
     TIFR0 |= (1 << OCF0A); // set compare flag to start timer
@@ -73,7 +81,7 @@ void delayMs(unsigned int delay){
             //re-start timer. will go to 0 before reaching the if statement above
         }
     }
-} */
+}
 
 
 //Used for the SSdisplay Ten second count down. 1 millisecond delay. 
@@ -99,12 +107,12 @@ void initTimer1() {
 }
 //Utilizes Timer1 for the SSD clock. 
 //must be used 1000 times for each second delay the SSD need to count down. 
-void delayS(unsigned int delay){
-    /*
-    OCR1A = (1 s * 16 MHz) / Prescaler
-    OCR1A = 16000000 / Prescaler
-    Use prescaler of 1025, set OCR1A = 15624
-    */
+/* void delayS(unsigned int delay){
+    
+    //OCR1A = (1 s * 16 MHz) / Prescaler
+    //OCR1A = 16000000 / Prescaler
+    //Use prescaler of 1025, set OCR1A = 15624
+    
     int count = delay;
 
     OCR1A = 15624;
@@ -125,8 +133,10 @@ void delayS(unsigned int delay){
     }
     // turn clock off
     TCCR1B  &= ~((1 << CS10) | (1 << CS11) | ( 1 << CS12));
-}
-/* void delayMs(unsigned int delay) {
+} */
+
+void delayMs(unsigned int delay) {
+    
     unsigned int delayCnt = 0;
     TCNT0 = 0; //starting the timer at 0 instead of some random junk number
     TIFR0 |= (1 << OCF0A); // set compare flag to start timer
@@ -137,5 +147,5 @@ void delayS(unsigned int delay){
             //re-start timer. will go to 0 before reaching the if statement above
         }
     }
-} */
+}
 

@@ -6,8 +6,8 @@
 #include <avr/io.h>
 
 void initTimer0();//need to implement this for debouncing states
-void delayMs(unsigned int delay);
+void delayUs(unsigned int delay);
 void initTimer1();//used to count 10 seconds for the seven segment display
-void delayS(unsigned int delay);
+void delayMs(unsigned int delay);
 
 #endif

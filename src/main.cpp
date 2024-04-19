@@ -78,7 +78,7 @@ int main(){
             break;
 
           case button_press:
-              delayMs(1);
+              delayMs(100);
               state = wait_release;
             break;
 
@@ -86,71 +86,71 @@ int main(){
             break;
 
           case button_release:
-            delayMs(1);
+            delayMs(100);
             state = nine;
             break;
 
         // For each state 9 through 0, desplay the correct number and then wait a second before transitioning to the next state
           case nine:
             // Turn motor off 
-            result = (1023 * 0.5);
-            changeDutyCycle(result);
+            //result = (1023 * 0.5);
+            //changeDutyCycle(result);
             turnOnSSDWithChar(9);
-            delayS(1);
+            delayMs(100000);
             state = eight;
             break;
 
           case eight:
             turnOnSSDWithChar(8);
-            delayS(1);
+            delayMs(100000);
             state = seven;
             break;
 
           case seven:
             turnOnSSDWithChar(7);
-            delayS(1);
+            delayMs(100000);
             state = six;
             break;
 
           case six:
             turnOnSSDWithChar(6);
-            delayS(1);
+            delayMs(100000);
             state = five;
             break;
 
           case five:
             turnOnSSDWithChar(5);
-            delayS(1);
+            delayMs(100000);
             state = four;
             break;
 
           case four:
             turnOnSSDWithChar(4);
-            delayS(1);
+            delayMs(100000);
             state = three;
             break;
 
           case three:
             turnOnSSDWithChar(3);
-            delayS(1);
+            delayMs(100000);
             state = two;
             break;
 
           case two:
             turnOnSSDWithChar(2);
-            delayS(1);
+            delayMs(100000);
             state = one;
             break;
 
           case one:
             turnOnSSDWithChar(1);
-            delayS(1);
+            delayMs(100000);
             state = zero;
             break;
 
           case zero:
             turnOnSSDWithChar(0);
-            delayS(1);
+            delayMs(100000);
             state = wait_press;
             activate = true;
             break;

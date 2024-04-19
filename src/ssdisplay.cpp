@@ -40,7 +40,7 @@ Seven segment configurations for LEDs A-H are as follows (LED H is the decimal p
 {1,1,1,1,1,1,1,0} //8
 {1,1,1,1,0,1,1,0} //9
 */
-void turnOnSSDWithChar(int num){
+void turnOnSSDWithChar(unsigned char num){
   switch (num) {
     case 9:
         PORTC |= (1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3) | (1 << PORTC5) | (1 << PORTC6); 
