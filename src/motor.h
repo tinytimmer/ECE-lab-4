@@ -5,6 +5,6 @@
 #define MOTOR_H
 
 void motorSetup();
-void setDirection( int num);
+void setDirection(unsigned int num);
 
 #endif

@@ -8,9 +8,9 @@ void motorSetup()
   // DDRH |= (1 << DDH6); use this if we wanted to have another motor
 }
 
-void setDirection( int num)
+void setDirection(unsigned int num)
 {
-    if (num == 1) {
+/*     if (num == 1) {
       // clockwise
     PORTB |= (1 << DDB5);
     PORTB &= ~(1 << DDB4);
@@ -26,8 +26,8 @@ void setDirection( int num)
   { // motor off
     PORTB &= ~(1 << DDB4);
     PORTB &= ~(1 << DDB5);
-  }  
-/*   if (num < 512)
+  }  */ 
+  if (num < 512)
   { // clockwise
     PORTB |= (1 << DDB5);
     PORTB &= ~(1 << DDB4);
@@ -42,6 +42,6 @@ void setDirection( int num)
   { // motor off
     PORTB &= ~(1 << DDB4);
     PORTB &= ~(1 << DDB5);
-  } */
+  } 
 
 }
