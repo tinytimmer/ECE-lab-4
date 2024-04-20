@@ -27,49 +27,19 @@ void initPWMTimer3()
 
 void changeDutyCycle(unsigned int result)
 {
-    if (result < 512)
-    {
-        OCR3A = 1023 - result * 2; // decrease duty cycle
-    }
-
-    else
-    {
-        OCR3A = 2 * result - 1023; // increase duty cycle
-    }
-
-    // read in ADCL and ADCH as 10bit result
-    // if 2.5 volts, then no PWM to motor
-   /*  if (result == (1023 * 0.5)) {
-        OCR3A = 0;
-       // OCR4A = 0;
-    }
-    // if less than 2.5 volts, clockwise (Timer 3)
-    else if (result < (1023 * 0.5)) {
-        setDirection(1);
-        OCR3A = (1023* 0.5 - result) * 2;
-       // OCR4A = 0;
-    }
-    
-    // if more than 2.5 volts, counterclockwise
-    else if (result > (1023 * 0.5)) {
-        setDirection(2);
-        OCR3A = 0;
-        //OCR4A = result;
-    }
-
-    // if 5 volts, max RPM counterclockwise
-    else if (result == 1023) {
-        setDirection(2);
-        OCR3A = 0;
-        //OCR4A = 1023;
-    }
-    
-    // if 0 volts, max RPM clockwise
-    else if (result == 0) {
-        setDirection(1);
+    if (result < 295) { //should be 255, but changed due to physical circuit error
         OCR3A = 1023;
-       // OCR4A = 0;
-    } */
-}
+    }
+    else if (result >= 295 && result < 512)
+    {
+        OCR3A = (1023 - result * 2)*2; // decrease duty cycle
+        Serial.println("Ocr3A is " + String((1023- 2*result)*2));
+    }
 
-//counterclockwise motion doesnt work no matter which version I use
+    else if (result >= 760) {
+        OCR3A = 1023;
+    } else {
+        OCR3A = (2 * result - 1023)*2; // increase duty cycle
+        Serial.println("#2 Ocr3A is " + String((2*result - 1023)*2));
+    }
+}
