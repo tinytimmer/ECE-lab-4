@@ -18,20 +18,7 @@
 // Initialize states. carried over from lab 2 and 3, added in more cases for the number we want to display
 typedef enum stateType_enum
 {
-  wait_press,
-  button_press,
-  wait_release,
-  button_release,
-  nine,
-  eight,
-  seven,
-  six,
-  five,
-  four,
-  three,
-  two,
-  one,
-  zero
+  wait_press,  button_press,  wait_release,  button_release,  nine,  eight,  seven,  six,  five,  four,  three,  two,  one,  zero
 } stateType;
 
 volatile stateType state = wait_press;
@@ -81,15 +68,15 @@ int main()
         cur_count -= 1;
       }
     } */
-    result = ADCL;
+    /* result = ADCL;
     result += ((unsigned int)ADCH) << 8;
     changeDutyCycle(result);
     setDirection(result);
     Serial.println(result);
     Serial.flush();
-    // Serial.begin(9600);
+    // Serial.begin(9600); */
 
-    /*     switch (state)
+    switch (state)
         {
         case wait_press:
           // TODO: Handle ADC conversion to control motor via PWM duty cycle
@@ -177,10 +164,10 @@ int main()
           activate = true;
           break;
         }
-      } */
+      } 
     return 0;
   }
-}
+
 
 // from previous labs
 ISR(INT0_vect)
