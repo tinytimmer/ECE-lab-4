@@ -10,23 +10,6 @@ void motorSetup()
 
 void setDirection(unsigned int num)
 {
-/*     if (num == 1) {
-      // clockwise
-    PORTB |= (1 << DDB5);
-    PORTB &= ~(1 << DDB4);
-  }
-
-  else if (num == 2) {
-    // counter-clockwise, this doesnt work
-    PORTB |= (1 << DDB4);
-    PORTB &= ~(1 << DDB5);
-  }
-
-  else
-  { // motor off
-    PORTB &= ~(1 << DDB4);
-    PORTB &= ~(1 << DDB5);
-  }  */ 
   if (num < 512)
   { // clockwise
     PORTB |= (1 << DDB5);
