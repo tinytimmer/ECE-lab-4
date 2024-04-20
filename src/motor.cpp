@@ -1,5 +1,3 @@
-// need this to control the motor, which uses the PWM files to control it my bad yall
-
 #include "motor.h"
 #include <Arduino.h>
 
@@ -10,10 +8,26 @@ void motorSetup()
   // DDRH |= (1 << DDH6); use this if we wanted to have another motor
 }
 
-void setDirection(unsigned int num)
+void setDirection( int num)
 {
+    if (num == 1) {
+      // clockwise
+    PORTB |= (1 << DDB5);
+    PORTB &= ~(1 << DDB4);
+  }
 
-  if (num < 512)
+  else if (num == 2) {
+    // counter-clockwise, this doesnt work
+    PORTB |= (1 << DDB4);
+    PORTB &= ~(1 << DDB5);
+  }
+
+  else
+  { // motor off
+    PORTB &= ~(1 << DDB4);
+    PORTB &= ~(1 << DDB5);
+  }  
+/*   if (num < 512)
   { // clockwise
     PORTB |= (1 << DDB5);
     PORTB &= ~(1 << DDB4);
@@ -28,5 +42,6 @@ void setDirection(unsigned int num)
   { // motor off
     PORTB &= ~(1 << DDB4);
     PORTB &= ~(1 << DDB5);
-  }
+  } */
+
 }

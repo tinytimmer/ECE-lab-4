@@ -21,6 +21,8 @@ void initPWMTimer3()
     OCR3A = 255;
 }
 
+
+
 void changeDutyCycle(unsigned int result)
 {
 /*     if (result < 512)
@@ -48,14 +50,14 @@ void changeDutyCycle(unsigned int result)
     
     // if more than 2.5 volts, counterclockwise
     else if (result > (1023 * 0.5)) {
-        setDirection(0);
+        setDirection(2);
         OCR3A = 0;
         //OCR4A = result;
     }
 
     // if 5 volts, max RPM counterclockwise
     else if (result == 1023) {
-        setDirection(0);
+        setDirection(2);
         OCR3A = 0;
         //OCR4A = 1023;
     }
@@ -67,3 +69,5 @@ void changeDutyCycle(unsigned int result)
        // OCR4A = 0;
     }
 }
+
+//counterclockwise motion doesnt work no matter which version I use
