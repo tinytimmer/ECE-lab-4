@@ -81,8 +81,11 @@ int main()
         case wait_press:
           // TODO: Handle ADC conversion to control motor via PWM duty cycle
           result = ADCL;
+          //Serial.println("result is " + String(result));
           result += ((unsigned int)ADCH) << 8;
+          //Serial.println("result 2 is " + String(result));
           changeDutyCycle(result);
+          setDirection(result);
           clearSSDisplay();
           break;
 
@@ -104,6 +107,7 @@ int main()
           // Turn motor off
           // result = (1023 * 0.5);
           // changeDutyCycle(result);
+          setDirection(512);
           turnOnSSDWithChar(9);
           delayMs(100000);
           state = eight;
